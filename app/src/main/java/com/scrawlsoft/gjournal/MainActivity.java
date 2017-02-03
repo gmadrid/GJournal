@@ -49,13 +49,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        long time = System.currentTimeMillis();
         // TODO: do this for realsies.
         System.out.println("OPTIONS ITEM SELECTED");
         ContentValues values = new ContentValues();
-        values.put(GJDataContract.Entry.COLUMN_NAME_TEXT, "Another thing");
+        values.put(GJDataContract.Entry.COLUMN_NAME_TEXT, "Another thing"/* + time*/);
         values.put(GJDataContract.Entry.COLUMN_NAME_TYPE, 0);
         values.put(GJDataContract.Entry.COLUMN_NAME_PARENT_ID, 0);
-        getContentResolver().insert(GJEntryProvider.CONTENT_URI, values);
+        Uri uri = getContentResolver().insert(GJEntryProvider.CONTENT_URI, values);
+        System.out.println("TOP URI: " + uri.toString());
+        getLoaderManager().restartLoader(1, null, this);
         return true;
     }
 

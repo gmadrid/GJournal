@@ -21,7 +21,7 @@ public final class DbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + GJDataContract.Entry.TABLE_NAME;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "FeedReader.db";
 
     public DbHelper(Context context) {
@@ -32,7 +32,7 @@ public final class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
 
-        // Every BuJo start with at least an empty Future Log.
+        // Every BuJo starts with at least an empty Future Log.
         ContentValues values = new ContentValues();
         // TODO: Localize these.
         values.put(GJDataContract.Entry.COLUMN_NAME_TEXT, "Future log");

@@ -2,6 +2,7 @@ package com.scrawlsoft.gjournal.data;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -38,11 +39,20 @@ public final class GJEntryProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(GJDataContract.Entry.TABLE_NAME);
 
+        if (uriMatcher.match(uri) == ENTRY_ID) {
+            long id = ContentUris.parseId(uri);
+            if (id < 0) {
+                // TODO: log here.
+                return null;
+            }
+            queryBuilder.appendWhere(GJDataContract.Entry._ID + " = " + id);
+        }
+
         // TODO: deal with ids.
         if (sortOrder == null || sortOrder.equals("")) {
             sortOrder = GJDataContract.Entry.COLUMN_NAME_TEXT; // TODO: make this make sense.
         }
-        return queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, sortOrder, null, null);
+        return queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Nullable
@@ -50,19 +60,39 @@ public final class GJEntryProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         System.out.println("Provider INSERT");
         long newId = entryDatabase.getWritableDatabase().insertOrThrow(GJDataContract.Entry.TABLE_NAME, null, values);
-        Uri newUri = CONTENT_URI.buildUpon().appendPath(String.valueOf(newId)).build();
+        Uri newUri = ContentUris.withAppendedId(CONTENT_URI, newId);
         System.out.println("NEW URI: " + newUri.toString());
         return newUri;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        String whereClause = selection;
+        String[] whereArgs = selectionArgs;
+        if (uriMatcher.match(uri) == ENTRY_ID) {
+            long id = ContentUris.parseId(uri);
+            if (id < 0) {
+                return 0;  // TODO: what?
+            }
+            whereClause = "_id=?";
+            whereArgs = new String[]{String.valueOf(id)};
+        }
+        return entryDatabase.getWritableDatabase().update(GJDataContract.Entry.TABLE_NAME, values, whereClause, whereArgs);
     }
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        String whereClause = selection;
+        String[] whereArgs = selectionArgs;
+        if (uriMatcher.match(uri) == ENTRY_ID) {
+            long id = ContentUris.parseId(uri);
+            if (id < 0) {
+                return 0;
+            }
+            whereClause = "_id=?";
+            whereArgs = new String[]{String.valueOf(id)};
+        }
+        return entryDatabase.getWritableDatabase().delete(GJDataContract.Entry.TABLE_NAME, whereClause, whereArgs);
     }
 
     @Nullable
