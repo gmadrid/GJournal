@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,17 +24,27 @@ public final class GJEntryProvider extends ContentProvider {
         return uriMatcher;
     }
 
+    private DbHelper entryDatabase;
+
     @Override
     public boolean onCreate() {
         System.out.println("ONCREATING");
-        return false;
+        entryDatabase = new DbHelper(getContext());
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         System.out.println("QUERYING!");
-        return null;
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(GJDataContract.Entry.TABLE_NAME);
+
+        // TODO: deal with ids.
+        if (sortOrder == null || sortOrder.equals("")) {
+            sortOrder = GJDataContract.Entry.COLUMN_NAME_TEXT; // TODO: make this make sense.
+        }
+        return queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, sortOrder, null, null);
     }
 
     @Nullable
