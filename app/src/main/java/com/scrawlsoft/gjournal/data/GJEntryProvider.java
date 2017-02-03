@@ -28,7 +28,6 @@ public final class GJEntryProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        System.out.println("ONCREATING");
         entryDatabase = new DbHelper(getContext());
         return true;
     }
@@ -36,7 +35,6 @@ public final class GJEntryProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        System.out.println("QUERYING!");
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(GJDataContract.Entry.TABLE_NAME);
 
@@ -50,7 +48,11 @@ public final class GJEntryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        return null;
+        System.out.println("Provider INSERT");
+        long newId = entryDatabase.getWritableDatabase().insertOrThrow(GJDataContract.Entry.TABLE_NAME, null, values);
+        Uri newUri = CONTENT_URI.buildUpon().appendPath(String.valueOf(newId)).build();
+        System.out.println("NEW URI: " + newUri.toString());
+        return newUri;
     }
 
     @Override
