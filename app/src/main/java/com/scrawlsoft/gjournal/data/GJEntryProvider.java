@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.scrawlsoft.gjournal.model.Entry;
+
 public final class GJEntryProvider extends ContentProvider {
     private static final String PROVIDER_NAME = "com.scrawlsoft.gjournal.entries";
     public static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/entries");
@@ -25,11 +27,11 @@ public final class GJEntryProvider extends ContentProvider {
         return uriMatcher;
     }
 
-    private DbHelper entryDatabase;
+    private EntryDbHelper entryDatabase;
 
     @Override
     public boolean onCreate() {
-        entryDatabase = new DbHelper(getContext());
+        entryDatabase = new EntryDbHelper(getContext());
         return true;
     }
 
@@ -48,9 +50,8 @@ public final class GJEntryProvider extends ContentProvider {
             queryBuilder.appendWhere(GJDataContract.Entry._ID + " = " + id);
         }
 
-        // TODO: deal with ids.
         if (sortOrder == null || sortOrder.equals("")) {
-            sortOrder = GJDataContract.Entry.COLUMN_NAME_TEXT; // TODO: make this make sense.
+            sortOrder = GJDataContract.Entry.COLUMN_SORT_ORDER; // TODO: make this make sense.
         }
         return queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
     }
@@ -63,6 +64,10 @@ public final class GJEntryProvider extends ContentProvider {
         Uri newUri = ContentUris.withAppendedId(CONTENT_URI, newId);
         System.out.println("NEW URI: " + newUri.toString());
         return newUri;
+    }
+
+    public Uri insert(Entry entry) {
+        return insert(CONTENT_URI, EntryDbHelper.valuesForEntry(entry));
     }
 
     @Override

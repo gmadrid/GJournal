@@ -1,9 +1,6 @@
 package com.scrawlsoft.gjournal.data;
 
-import android.database.Cursor;
 import android.provider.BaseColumns;
-
-import java.util.Date;
 
 public final class GJDataContract {
     // Never make one of these.
@@ -18,5 +15,6 @@ public final class GJDataContract {
         public static final String COLUMN_NAME_SIGNIFIER = "signifier";
         public static final String COLUMN_NAME_TEXT = "text";
         public static final String COLUMN_NAME_TYPE = "type";
+        public static final String COLUMN_SORT_ORDER = "sortorder";
     }
 }
