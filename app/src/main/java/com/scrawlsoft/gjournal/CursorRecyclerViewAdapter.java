@@ -28,8 +28,6 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    private Context mContext;
-
     private Cursor mCursor;
 
     private boolean mDataValid;
@@ -39,7 +37,6 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     private DataSetObserver mDataSetObserver;
 
     public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
-        mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
         mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
@@ -50,15 +47,13 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     public Cursor getCursor() {
-        System.out.println("GET CURSOR: " + mCursor.getColumnCount());
         return mCursor;
     }
 
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor != null) {
-            int count = mCursor.getCount();
-            return count;
+            return mCursor.getCount();
         }
         return 0;
     }
@@ -106,7 +101,6 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
      * closed.
      */
     public Cursor swapCursor(Cursor newCursor) {
-        System.out.println("SWAPPING: " + mCursor + " <==> " + newCursor + ":" + newCursor.getColumnCount());
         if (newCursor == mCursor) {
             return null;
         }

@@ -38,7 +38,6 @@ public final class GJEntryProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, final String selection, String[] selectionArgs, String sortOrder) {
-        System.out.println("AGAIN: " + projection + ":" + sortOrder);
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(GJDataContract.Entry.TABLE_NAME);
 
@@ -52,24 +51,17 @@ public final class GJEntryProvider extends ContentProvider {
         }
 
         if (sortOrder == null || sortOrder.equals("")) {
-//            sortOrder = GJDataContract.Entry.COLUMN_SORT_ORDER; // TODO: make this make sense.
+            sortOrder = GJDataContract.Entry.COLUMN_SORT_ORDER; // TODO: make this make sense.
         }
         Cursor query = queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
-        System.out.println("CURSOR HERE: " + query.getColumnCount());
-        for (int i = 0; i < query.getColumnCount(); i++) {
-            System.out.println("  COL " + i + ": " + query.getColumnName(i));
-        }
-        System.out.println("XXXXXXXXXXXXXX: " + query);
         return query;
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        System.out.println("Provider INSERT");
         long newId = entryDatabase.getWritableDatabase().insertOrThrow(GJDataContract.Entry.TABLE_NAME, null, values);
         Uri newUri = ContentUris.withAppendedId(CONTENT_URI, newId);
-        System.out.println("NEW URI: " + newUri.toString());
         return newUri;
     }
 
