@@ -44,11 +44,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public int getItemViewType(int position) {
-                System.out.println("CURSOR: " + getCursor());
-                System.out.println("0: " + getCursor().getColumnName(0));
-                System.out.println("1: " + getCursor().getColumnName(1));
-                int index = getCursor().getColumnIndex(GJDataContract.Entry.COLUMN_NAME_TYPE);
-                int type = getCursor().getInt(index);
+                Cursor cursor = getCursor();
+                System.out.println("YYYYYYYYYYYYYYYY: " + cursor + ":" + cursor.getColumnCount());
+                long id = getItemId(position);
+                int index = cursor.getColumnIndex(GJDataContract.Entry.COLUMN_NAME_TYPE);
+                System.out.println("INDEX: " + index);
+                int type = cursor.getInt(index);
+                System.out.println("TYPE: " + type + ":" + id);
                 int resourceId = 0;
                 switch (type) {
                     case Entry.TYPE_FUTURE_LOG:
@@ -63,8 +65,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         // TODO: do this.
                         // fallthrough
                 }
-//                System.out.println("HERE" + position + ":" + resourceId);
+                System.out.println("HERE" + position + ":" + resourceId);
                 return resourceId;
+
+//                return android.R.layout.simple_list_item_1;
+//
+//                System.out.println("CURSOR: " + getCursor());
+//                System.out.println("0: " + getCursor().getColumnName(0));
+//                System.out.println("1: " + getCursor().getColumnName(1));
             }
 
             @Override
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        System.out.println("QUUX");
+        System.out.println("QUUX: " + cursor.getColumnCount());
         adapter.swapCursor(cursor);
         System.out.println("SUGAR");
     }

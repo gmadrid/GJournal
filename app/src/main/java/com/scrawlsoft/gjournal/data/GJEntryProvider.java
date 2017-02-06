@@ -37,7 +37,8 @@ public final class GJEntryProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, final String selection, String[] selectionArgs, String sortOrder) {
+        System.out.println("AGAIN: " + projection + ":" + sortOrder);
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(GJDataContract.Entry.TABLE_NAME);
 
@@ -51,9 +52,15 @@ public final class GJEntryProvider extends ContentProvider {
         }
 
         if (sortOrder == null || sortOrder.equals("")) {
-            sortOrder = GJDataContract.Entry.COLUMN_SORT_ORDER; // TODO: make this make sense.
+//            sortOrder = GJDataContract.Entry.COLUMN_SORT_ORDER; // TODO: make this make sense.
         }
-        return queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor query = queryBuilder.query(entryDatabase.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+        System.out.println("CURSOR HERE: " + query.getColumnCount());
+        for (int i = 0; i < query.getColumnCount(); i++) {
+            System.out.println("  COL " + i + ": " + query.getColumnName(i));
+        }
+        System.out.println("XXXXXXXXXXXXXX: " + query);
+        return query;
     }
 
     @Nullable

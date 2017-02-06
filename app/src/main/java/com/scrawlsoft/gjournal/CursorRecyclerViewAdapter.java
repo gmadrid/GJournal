@@ -50,6 +50,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     public Cursor getCursor() {
+        System.out.println("GET CURSOR: " + mCursor.getColumnCount());
         return mCursor;
     }
 
@@ -105,6 +106,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
      * closed.
      */
     public Cursor swapCursor(Cursor newCursor) {
+        System.out.println("SWAPPING: " + mCursor + " <==> " + newCursor + ":" + newCursor.getColumnCount());
         if (newCursor == mCursor) {
             return null;
         }
