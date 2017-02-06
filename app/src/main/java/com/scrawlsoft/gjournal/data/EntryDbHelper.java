@@ -26,7 +26,7 @@ final class EntryDbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + GJDataContract.Entry.TABLE_NAME;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "GJournal.db";
 
     EntryDbHelper(Context context) {

@@ -97,8 +97,9 @@ public final class Entry {
 
     public static Entry Task(Entry parentEntry) {
         Entry entry = new Entry();
+        entry.type = TYPE_TASK;
         entry.parentId = parentEntry.getId();
-        entry.text = "";
+        entry.text = "UNNAMED TASK";
         return entry;
     }
 

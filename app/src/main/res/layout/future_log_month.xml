@@ -6,7 +6,6 @@
 
     <TextView
         android:id="@android:id/text1"
-        android:text="Foobar"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
@@ -18,13 +17,13 @@
 
     <Button
         android:id="@+id/button1"
-        android:text="Calendar"
+        android:text="@string/calendar_button_label"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/button2"
-        android:text="Tasks"
+        android:text="@string/task_button_label"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 </LinearLayout>
